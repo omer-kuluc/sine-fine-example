@@ -7,13 +7,14 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const containerRef = useRef(null);
-  const phraseRefs = useRef([]);
   const orbitContainerRef = useRef(null);
+  const phraseRefs = useRef([]);
+  const lineRefs = useRef([]);
 
   const phrases = [
     "life.", "job.", "career.", "family.", "big television.",
     "washing machine.", "good health.", "dental insurance.",
-    "friends.", "family."
+    "friends.", "future."
   ];
 
   const narrativeBlocks = [
@@ -28,102 +29,65 @@ export default function Home() {
 
   useEffect(() => {
     const ctx = gsap.context((self) => {
-      // 1. ORBIT SECTION: CHOOSE ve Etrafındaki Dallanma
+      // 1. ORBIT & BRANCHES ANIMATION
       const orbitTl = gsap.timeline({
         scrollTrigger: {
           trigger: orbitContainerRef.current,
           start: "top top",
-          end: "+=400%",
+          end: "+=350%",
           scrub: 1.5,
           pin: true,
-          antialiasing: true
         }
       });
 
-      // "CHOOSE" yazısının hafif büyümesi ve parlaması
-      // orbitTl.to(".main-choose", {
-      //   scale: 1.1,
-      //   letterSpacing: "0.3em",
-      //   opacity: 0.15,
-      //   duration: 2
-      // }, 0);
+      // Dalların çizilmesi ve kelimelerin uçlarda belirmesi
+      lineRefs.current.forEach((line, i) => {
+        if (!line) return;
+        const length = line.getTotalLength();
+        gsap.set(line, { strokeDasharray: length, strokeDashoffset: length });
 
-      // Kelimelerin merkezden spiral çizerek dağılması
-      phraseRefs.current.forEach((el, i) => {
-        const angle = (i / phrases.length) * Math.PI * 2.5; // Spiral için 2.5 tur
-        const radius = 180 + (i * 15); // Her kelime biraz daha uzakta
-        const x = Math.cos(angle) * radius;
-        const y = Math.sin(angle) * radius;
+        orbitTl.to(line, {
+          strokeDashoffset: 0,
+          duration: 1,
+          ease: "power2.inOut"
+        }, i * 0.1);
 
-        orbitTl.fromTo(el,
-          {
-            x: 0,
-            y: 0,
-            opacity: 0,
-            scale: 0,
-            filter: "blur(10px)"
-          },
-          {
-            x: x,
-            y: y,
-            opacity: 0.8,
-            scale: 1,
-            filter: "blur(0px)",
-            duration: 1,
-            ease: "expo.out"
-          },
-          i * 0.1 // Staggered fırlatma
+        orbitTl.fromTo(phraseRefs.current[i],
+          { opacity: 0, scale: 0, filter: "blur(10px)" },
+          { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.5, ease: "back.out(1.7)" },
+          "-=0.4"
         );
       });
 
-      // 2. NARRATIVE SECTION: Sinematik Odaklanma ve Reveal
-      const blocks = self.selector('.narrative-block');
-      blocks.forEach((block, i) => {
-        const text = block.querySelector('p');
+      orbitTl.to(".main-choose", { scale: 0.9, opacity: 0.05, duration: 1.5 }, 0.5);
 
+      // 2. NARRATIVE ANIMATION
+      const blocks = self.selector('.narrative-block');
+      blocks.forEach((block) => {
+        const text = block.querySelector('p');
         gsap.fromTo(text,
+          { opacity: 0, y: 40, filter: "blur(10px)", clipPath: "inset(0 0 100% 0)" },
           {
-            opacity: 0,
-            y: 60,
-            filter: "blur(12px)",
-            clipPath: "inset(0 0 100% 0)"
-          },
-          {
-            opacity: 1,
-            y: 0,
-            filter: "blur(0px)",
-            clipPath: "inset(0 0 0% 0)",
-            duration: 2,
-            ease: "power4.out",
+            opacity: 1, y: 0, filter: "blur(0px)", clipPath: "inset(0 0 0% 0)",
             scrollTrigger: {
               trigger: block,
               start: "top 85%",
-              end: "top 35%",
+              end: "top 30%",
               scrub: 1,
             }
           }
         );
-
-        // Arka plan ızgarasının (grid) metinle beraber hafifçe kayması (Parallax)
-        gsap.to(".light-grid", {
-          y: "-=30",
-          scrollTrigger: {
-            trigger: block,
-            scrub: 2
-          }
-        });
       });
 
-      // Intro Geçişi - Daha yumuşak bir fade-in
+      // 3. INTRO TRANSITION (Portal Kilit Açma)
       ScrollTrigger.create({
         trigger: ".intro-section",
         start: "top 60%",
         onEnter: () => {
-          gsap.to(".home-overlay", { opacity: 1, duration: 1.5 });
+          gsap.to(".intro-section", { opacity: 1, duration: 1.5 });
           document.querySelector('.intro-body')?.classList.add('is-ready');
         },
         onLeaveBack: () => {
-          gsap.to(".home-overlay", { opacity: 0, duration: 1 });
           document.querySelector('.intro-body')?.classList.remove('is-ready');
         }
       });
@@ -136,29 +100,51 @@ export default function Home() {
   return (
     <div className="home-container" ref={containerRef}>
       <div className="light-grid"></div>
-      <div className="home-overlay"></div>
 
-      {/* Bölüm 1: Orbiting Choices */}
+      {/* Bölüm 1: Dallanan Seçimler */}
       <section className="orbit-container" ref={orbitContainerRef}>
         <div className="sticky-center">
-          <div className="status-bar">
-            <span className="pulsing-dot"></span>
-            NEURAL MAPPING IN PROGRESS
-          </div>
-          {/* <h1 className="main-choose">CHOOSE</h1> */}
-          {phrases.map((phrase, i) => (
-            <div
-              key={i}
-              ref={el => phraseRefs.current[i] = el}
-              className="orbit-phrase"
-            >
-              {phrase}
-            </div>
-          ))}
+          <h1 className="main-choose">CHOOSE</h1>
+
+          <svg className="branch-svg-overlay" viewBox="0 0 800 800">
+            {phrases.map((_, i) => {
+              const angle = (i / phrases.length) * Math.PI * 2;
+              const r = 260;
+              const x2 = 400 + Math.cos(angle) * r;
+              const y2 = 400 + Math.sin(angle) * r;
+              return (
+                <line
+                  key={i}
+                  ref={el => lineRefs.current[i] = el}
+                  x1="400" y1="400" x2={x2} y2={y2}
+                  stroke="var(--gold)"
+                  strokeWidth="1"
+                  opacity="0.25"
+                />
+              );
+            })}
+          </svg>
+
+          {phrases.map((phrase, i) => {
+            const angle = (i / phrases.length) * Math.PI * 2;
+            const r = 280;
+            const left = 50 + (Math.cos(angle) * r / 8) + "%";
+            const top = 50 + (Math.sin(angle) * r / 8) + "%";
+            return (
+              <div
+                key={i}
+                ref={el => phraseRefs.current[i] = el}
+                className="branch-phrase"
+                style={{ left, top }}
+              >
+                {phrase}
+              </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* Bölüm 2: Narrative Content */}
+      {/* Bölüm 2: Anlatı Metinleri */}
       <section className="narrative-section">
         {narrativeBlocks.map((text, i) => (
           <div key={i} className="narrative-block">
@@ -167,8 +153,8 @@ export default function Home() {
         ))}
       </section>
 
-      {/* Bölüm 3: Intro Transition */}
-      <section className="intro-section">
+      {/* Bölüm 3: Intro Bileşeni */}
+      <section className="intro-section" style={{ opacity: 0 }}>
         <Intro />
       </section>
     </div>

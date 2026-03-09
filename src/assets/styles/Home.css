@@ -1,10 +1,9 @@
-/* --- AYDINLIK & SİNEMATİK TEMA --- */
+/* --- MOBİL KODLARI (Varsayılan) --- */
 :root {
   --cream: #f5f0e8;
   --gold: #c9a84c;
-  --gold-soft: rgba(201, 168, 76, 0.2);
+  --gold-alpha: rgba(201, 168, 76, 0.2);
   --text-dark: #1a1208;
-  --text-muted: rgba(26, 18, 8, 0.6);
 }
 
 .home-container {
@@ -15,165 +14,150 @@
   position: relative;
 }
 
-/* Background Grid & Overlay */
 .light-grid {
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(var(--gold-soft) 1px, transparent 1px),
-    linear-gradient(90deg, var(--gold-soft) 1px, transparent 1px);
-  background-size: 80px 80px;
+    linear-gradient(var(--gold-alpha) 1px, transparent 1px),
+    linear-gradient(90deg, var(--gold-alpha) 1px, transparent 1px);
+  background-size: 50px 50px;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.4;
+  opacity: 0.3;
 }
 
-.home-overlay {
-  position: fixed;
-  inset: 0;
-  background: var(--cream);
-  z-index: 15;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 1.5s ease;
-}
-
-/* Status Bar */
-.status-bar {
-  position: absolute;
-  top: 15%;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 10px;
-  letter-spacing: 0.4em;
-  color: var(--gold);
-  opacity: 0.7;
-}
-
-.pulsing-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--gold);
-  border-radius: 50%;
-  animation: pulse-glow 2s infinite;
-}
-
-@keyframes pulse-glow {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  50% {
-    transform: scale(1.5);
-    opacity: 0.4;
-    box-shadow: 0 0 10px var(--gold);
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* Section 1: Orbit */
+/* Orbit & Branches */
 .orbit-container {
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
-  perspective: 1000px;
 }
 
 .sticky-center {
   position: relative;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
 }
 
 .main-choose {
-  font-size: clamp(4rem, 18vw, 12rem);
+  font-size: 3.2rem;
   font-weight: 900;
   letter-spacing: 0.1em;
-  opacity: 0.1;
-  user-select: none;
-  transition: letter-spacing 0.5s ease;
+  opacity: 0.2;
 }
 
-.orbit-phrase {
+.branch-svg-overlay {
   position: absolute;
-  font-size: clamp(0.9rem, 1.8vw, 1.4rem);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.branch-phrase {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 0.6rem;
   color: var(--gold);
   text-transform: uppercase;
-  font-weight: 500;
-  letter-spacing: 0.15em;
   white-space: nowrap;
-  pointer-events: none;
-  will-change: transform, opacity;
+  letter-spacing: 0.05em;
+  font-weight: 500;
 }
 
-/* Section 2: Narrative */
+/* Narrative Section */
 .narrative-section {
-  position: relative;
+  padding: 0 20px;
   z-index: 10;
-  padding-bottom: 20vh;
+  position: relative;
 }
 
 .narrative-block {
-  min-height: 80vh;
-  /* Daha geniş alan, daha rahat odaklanma */
+  height: 80dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 10vw;
 }
 
 .narrative-text {
-  font-size: clamp(1.4rem, 3.5vw, 2.8rem);
-  line-height: 1.5;
+  font-size: 1.1rem;
+  line-height: 1.6;
   text-align: center;
-  max-width: 1100px;
-  color: var(--text-dark);
   font-style: italic;
   font-weight: 300;
-  will-change: transform, filter, clip-path;
 }
 
-/* Son paragrafı vurgula (Sine Fine Çağrısı) */
 .narrative-block:last-child .narrative-text {
   font-weight: 700;
-  font-style: normal;
   color: var(--gold);
-  text-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+  font-style: normal;
 }
 
-/* Intro Connectivity */
-.intro-section {
-  position: relative;
-  z-index: 20;
-  min-height: 100vh;
+/* Intro Connectivity - Portallar kilitli başlar */
+.intro-body:not(.is-ready) .portal-container,
+.intro-body:not(.is-ready) .portal-name,
+.intro-body:not(.is-ready) .choose-word,
+.intro-body:not(.is-ready) #branch-svg {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
-/* --- RESPONSIVE OPTIMIZATION --- */
-@media(width < 768px) {
-  .narrative-block {
-    padding: 0 5vw;
-    min-height: 60vh;
+.intro-body.is-ready .portal-container,
+.intro-body.is-ready .portal-name,
+.intro-body.is-ready .choose-word,
+.intro-body.is-ready #branch-svg {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  transition: opacity 2s ease;
+}
+
+/* --- TABLET KODLARI --- */
+@media(width>=768px) {
+  .main-choose {
+    font-size: 7rem;
   }
 
-  .status-bar {
-    font-size: 8px;
+  .branch-phrase {
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+  }
+
+  .narrative-text {
+    font-size: 1.8rem;
+    max-width: 80%;
+  }
+
+  .light-grid {
+    background-size: 80px 80px;
   }
 }
 
-@media(width >=1280px) {
-  .orbit-phrase:hover {
-    color: var(--text-dark);
-    opacity: 1 !important;
-    transition: 0.3s;
+/* --- DESKTOP KODLARI --- */
+@media(width>=1280px) {
+  .main-choose {
+    font-size: 10rem;
+  }
+
+  .branch-phrase {
+    font-size: 1.1rem;
+  }
+
+  .narrative-text {
+    font-size: 2.4rem;
+    max-width: 1000px;
+  }
+
+  .light-grid {
+    background-size: 100px 100px;
+  }
+
+  .branch-svg-overlay {
+    width: 800px;
+    height: 800px;
   }
 }
