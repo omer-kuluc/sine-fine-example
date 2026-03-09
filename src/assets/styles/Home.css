@@ -1,188 +1,179 @@
-/* --- MOBİL KODLARI (Mobile First) --- */
+/* --- AYDINLIK & SİNEMATİK TEMA --- */
 :root {
   --cream: #f5f0e8;
   --gold: #c9a84c;
-  --gold-dim: rgba(201, 168, 76, 0.3);
-  --bg-dark: #0d0a08;
+  --gold-soft: rgba(201, 168, 76, 0.2);
+  --text-dark: #1a1208;
+  --text-muted: rgba(26, 18, 8, 0.6);
 }
 
 .home-container {
-  background-color: var(--bg-dark);
-  color: var(--gold);
+  background-color: var(--cream);
+  color: var(--text-dark);
   font-family: "Cinzel", serif;
+  overflow-x: hidden;
   position: relative;
-  transition: background-color 1s ease;
 }
 
-/* Fütüristik Arka Plan Izgarası */
-.cyber-grid {
+/* Background Grid & Overlay */
+.light-grid {
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(var(--gold-dim) 1px, transparent 1px),
-    linear-gradient(90deg, var(--gold-dim) 1px, transparent 1px);
-  background-size: 50px 50px;
-  opacity: 0.1;
+    linear-gradient(var(--gold-soft) 1px, transparent 1px),
+    linear-gradient(90deg, var(--gold-soft) 1px, transparent 1px);
+  background-size: 80px 80px;
   pointer-events: none;
-  z-index: 1;
-}
-
-/* Sabit Duracak CHOOSE Alanı */
-.sticky-ui {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  text-align: center;
-  width: 100%;
-  pointer-events: none;
-}
-
-.fixed-choose {
-  font-size: clamp(3rem, 15vw, 8rem);
-  font-weight: 900;
-  margin: 0;
-  letter-spacing: -0.05em;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--gold);
+  z-index: 0;
   opacity: 0.4;
 }
 
-.choose-label {
-  font-size: 10px;
-  letter-spacing: 0.5em;
-  margin-bottom: 10px;
-  opacity: 0.8;
+.home-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--cream);
+  z-index: 15;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.5s ease;
 }
 
-/* Tarama Çizgisi */
-.scan-line {
+/* Status Bar */
+.status-bar {
   position: absolute;
-  width: 100%;
-  height: 2px;
-  background: var(--gold);
-  box-shadow: 0 0 15px var(--gold);
-  top: 50%;
-  left: 0;
-  opacity: 0.2;
-  animation: scan 4s linear infinite;
+  top: 15%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  opacity: 0.7;
 }
 
-@keyframes scan {
+.pulsing-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
   0% {
-    top: 30%;
+    transform: scale(1);
+    opacity: 1;
   }
 
   50% {
-    top: 70%;
+    transform: scale(1.5);
+    opacity: 0.4;
+    box-shadow: 0 0 10px var(--gold);
   }
 
   100% {
-    top: 30%;
+    transform: scale(1);
+    opacity: 1;
   }
 }
 
-/* İçerik Akışı */
-.content-scroll {
+/* Section 1: Orbit */
+.orbit-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.sticky-center {
   position: relative;
-  z-index: 5;
-}
-
-.hero-landing {
-  height: 100dvh;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
-.hero-decoration {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+.main-choose {
+  font-size: clamp(4rem, 18vw, 12rem);
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  opacity: 0.1;
+  user-select: none;
+  transition: letter-spacing 0.5s ease;
 }
 
-.deco-line {
-  width: 30px;
-  height: 1px;
-  background: var(--gold);
-}
-
-.deco-text {
-  font-size: 9px;
-  letter-spacing: 0.3em;
-}
-
-.hero-sub {
-  margin-top: 2rem;
-  font-size: 12px;
-  letter-spacing: 0.8em;
-  animation: pulse 2s infinite;
-}
-
-.text-section {
-  height: 100dvh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-left: 10%;
-  /* CHOOSE kelimesinden sonrasına hizalamak için */
-}
-
-.phrase-wrapper {
-  overflow: hidden;
-}
-
-.phrase-text {
-  font-size: clamp(1.5rem, 8vw, 5rem);
-  font-weight: 400;
+.orbit-phrase {
+  position: absolute;
+  font-size: clamp(0.9rem, 1.8vw, 1.4rem);
   color: var(--gold);
   text-transform: uppercase;
-  display: block;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  white-space: nowrap;
+  pointer-events: none;
+  will-change: transform, opacity;
 }
 
-/* Intro'daki portalları en sonda açmak için kural */
-.intro-body:not(.is-ready) .portal-container {
-  opacity: 0 !important;
-  transform: translateY(20px) !important;
-  pointer-events: none !important;
+/* Section 2: Narrative */
+.narrative-section {
+  position: relative;
+  z-index: 10;
+  padding-bottom: 20vh;
 }
 
-.intro-body.is-ready .portal-container {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-  pointer-events: auto !important;
-  transition: all 1s ease;
+.narrative-block {
+  min-height: 80vh;
+  /* Daha geniş alan, daha rahat odaklanma */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10vw;
 }
 
-/* --- TABLET KODLARI --- */
-@media(width>=768px) {
-  .fixed-choose {
-    font-size: 10rem;
-    opacity: 0.2;
+.narrative-text {
+  font-size: clamp(1.4rem, 3.5vw, 2.8rem);
+  line-height: 1.5;
+  text-align: center;
+  max-width: 1100px;
+  color: var(--text-dark);
+  font-style: italic;
+  font-weight: 300;
+  will-change: transform, filter, clip-path;
+}
+
+/* Son paragrafı vurgula (Sine Fine Çağrısı) */
+.narrative-block:last-child .narrative-text {
+  font-weight: 700;
+  font-style: normal;
+  color: var(--gold);
+  text-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+}
+
+/* Intro Connectivity */
+.intro-section {
+  position: relative;
+  z-index: 20;
+  min-height: 100vh;
+}
+
+/* --- RESPONSIVE OPTIMIZATION --- */
+@media(width < 768px) {
+  .narrative-block {
+    padding: 0 5vw;
+    min-height: 60vh;
+  }
+
+  .status-bar {
+    font-size: 8px;
   }
 }
 
-/* --- DESKTOP KODLARI --- */
-@media(width>=1280px) {
-  .fixed-choose {
-    font-size: 14rem;
-  }
-
-  .text-section {
-    padding-left: 20%;
-  }
-}
-
-@keyframes pulse {
-
-  0%,
-  100% {
-    opacity: 0.4;
-  }
-
-  50% {
-    opacity: 1;
+@media(width >=1280px) {
+  .orbit-phrase:hover {
+    color: var(--text-dark);
+    opacity: 1 !important;
+    transition: 0.3s;
   }
 }
