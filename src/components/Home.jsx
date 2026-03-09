@@ -13,7 +13,7 @@ export default function Home() {
   const phrases = [
     "life.", "job.", "career.", "family.", "big television.",
     "washing machine.", "good health.", "dental insurance.",
-    "friends.", "family.", "your future."
+    "friends.", "family."
   ];
 
   const narrativeBlocks = [
@@ -41,12 +41,12 @@ export default function Home() {
       });
 
       // "CHOOSE" yazısının hafif büyümesi ve parlaması
-      orbitTl.to(".main-choose", {
-        scale: 1.1,
-        letterSpacing: "0.3em",
-        opacity: 0.15,
-        duration: 2
-      }, 0);
+      // orbitTl.to(".main-choose", {
+      //   scale: 1.1,
+      //   letterSpacing: "0.3em",
+      //   opacity: 0.15,
+      //   duration: 2
+      // }, 0);
 
       // Kelimelerin merkezden spiral çizerek dağılması
       phraseRefs.current.forEach((el, i) => {
@@ -145,7 +145,7 @@ export default function Home() {
             <span className="pulsing-dot"></span>
             NEURAL MAPPING IN PROGRESS
           </div>
-          <h1 className="main-choose">CHOOSE</h1>
+          {/* <h1 className="main-choose">CHOOSE</h1> */}
           {phrases.map((phrase, i) => (
             <div
               key={i}
