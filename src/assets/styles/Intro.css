@@ -19,8 +19,6 @@
   position: relative;
   transition: background-color 0.8s ease;
   touch-action: none;
-  overscroll-behavior: none;
-  -webkit-overflow-scrolling: none;
 }
 
 .intro-body:has(.portal-container:hover) .portal-name,

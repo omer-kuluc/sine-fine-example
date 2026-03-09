@@ -1,0 +1,188 @@
+/* --- MOBİL KODLARI (Mobile First) --- */
+:root {
+  --cream: #f5f0e8;
+  --gold: #c9a84c;
+  --gold-dim: rgba(201, 168, 76, 0.3);
+  --bg-dark: #0d0a08;
+}
+
+.home-container {
+  background-color: var(--bg-dark);
+  color: var(--gold);
+  font-family: "Cinzel", serif;
+  position: relative;
+  transition: background-color 1s ease;
+}
+
+/* Fütüristik Arka Plan Izgarası */
+.cyber-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--gold-dim) 1px, transparent 1px),
+    linear-gradient(90deg, var(--gold-dim) 1px, transparent 1px);
+  background-size: 50px 50px;
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Sabit Duracak CHOOSE Alanı */
+.sticky-ui {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  text-align: center;
+  width: 100%;
+  pointer-events: none;
+}
+
+.fixed-choose {
+  font-size: clamp(3rem, 15vw, 8rem);
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--gold);
+  opacity: 0.4;
+}
+
+.choose-label {
+  font-size: 10px;
+  letter-spacing: 0.5em;
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+/* Tarama Çizgisi */
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: var(--gold);
+  box-shadow: 0 0 15px var(--gold);
+  top: 50%;
+  left: 0;
+  opacity: 0.2;
+  animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+  0% {
+    top: 30%;
+  }
+
+  50% {
+    top: 70%;
+  }
+
+  100% {
+    top: 30%;
+  }
+}
+
+/* İçerik Akışı */
+.content-scroll {
+  position: relative;
+  z-index: 5;
+}
+
+.hero-landing {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-decoration {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.deco-line {
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.deco-text {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+}
+
+.hero-sub {
+  margin-top: 2rem;
+  font-size: 12px;
+  letter-spacing: 0.8em;
+  animation: pulse 2s infinite;
+}
+
+.text-section {
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 10%;
+  /* CHOOSE kelimesinden sonrasına hizalamak için */
+}
+
+.phrase-wrapper {
+  overflow: hidden;
+}
+
+.phrase-text {
+  font-size: clamp(1.5rem, 8vw, 5rem);
+  font-weight: 400;
+  color: var(--gold);
+  text-transform: uppercase;
+  display: block;
+}
+
+/* Intro'daki portalları en sonda açmak için kural */
+.intro-body:not(.is-ready) .portal-container {
+  opacity: 0 !important;
+  transform: translateY(20px) !important;
+  pointer-events: none !important;
+}
+
+.intro-body.is-ready .portal-container {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+  transition: all 1s ease;
+}
+
+/* --- TABLET KODLARI --- */
+@media(width>=768px) {
+  .fixed-choose {
+    font-size: 10rem;
+    opacity: 0.2;
+  }
+}
+
+/* --- DESKTOP KODLARI --- */
+@media(width>=1280px) {
+  .fixed-choose {
+    font-size: 14rem;
+  }
+
+  .text-section {
+    padding-left: 20%;
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
